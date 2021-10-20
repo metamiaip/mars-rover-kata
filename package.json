@@ -1,0 +1,14 @@
+{
+  "name": "js-mars-rover-kata",
+  "version": "1.0.0",
+  "description": "mars rover kata",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Jonathan Ip",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^27.2.5"
+  }
+}
