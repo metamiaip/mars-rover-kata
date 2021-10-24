@@ -7,10 +7,10 @@ const {
   
 describe("Rover test", () => {
     test("return the pass-in mars plateau size", () => {
-      expect(rover([5,5])).toBe("Mars Plateau Size is [5,5]. Rover initial position is [0,0]");
+      expect(rover([5,5])).toBe("Mars Plateau Size is [5,5].\nRover initial position is [0,0].\nRover face to N.");
     });
   
     test("return the pass-in mars plateau size, and initial position", () => {
-        expect(rover([5,5],[0,1])).toBe("Mars Plateau Size is [5,5]. Rover initial position is [0,1]");
+        expect(rover([5,5],[0,1],"E")).toBe("Mars Plateau Size is [5,5].\nRover initial position is [0,1].\nRover face to E.");
       });
 });

@@ -1,8 +1,9 @@
-function rover(size, position) {
+function rover(size, position, faceTo) {
     const marsPlateauSize = size;
     const roverPos = (position === undefined) ? [0, 0] : position;
+    const roverFaceTo = (faceTo === undefined) ? "N" : faceTo;
 
-    return `Mars Plateau Size is [${marsPlateauSize}]. Rover initial position is [${roverPos}]`
+    return `Mars Plateau Size is [${marsPlateauSize}].\nRover initial position is [${roverPos}].\nRover face to ${roverFaceTo}.`
 }
 
 function move() {
