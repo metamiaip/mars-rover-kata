@@ -1,4 +1,7 @@
-export function rover() {
+export function rover(size) {
+    const marsPlateauSize = size
+    
+    console.log(`Mars Plateau Size is [${marsPlateauSize}]`);
     return "I am Mars Rover!!!"
 }
 
