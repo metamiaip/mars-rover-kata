@@ -2,11 +2,18 @@ function rover(size, position, faceTo, cmd) {
     const marsPlateauSize = size;
     const initPos = (position === undefined) ? [0, 0] : position;
     const initFace = (faceTo === undefined) ? "N" : faceTo;
+    const roverCmd = (cmd === undefined) ? "" : [...cmd];
+    
     let roverPos = (position === undefined) ? [0, 0] : position;
     let roverFaceTo = (faceTo === undefined) ? "N" : faceTo;
-    const roverCmd = (cmd === undefined) ? "" : [...cmd];
     let tmpRoverPos = (position === undefined) ? [0, 0] : position;
-    //showRoverLocation(marsPlateauSize,roverPos,roverFaceTo);
+    
+    if (initPos[0]<0 ||
+        initPos[1]<0 ||
+        initPos[0]>marsPlateauSize[0] ||
+        initPos[1]>marsPlateauSize[1] ) {
+            return "Rover initial position is out of the plateau.";
+    }
 
     for(let i = 0; i < roverCmd.length; i++) {
         if (roverCmd[i] === 'L' || roverCmd[i] === 'R') {
@@ -17,7 +24,6 @@ function rover(size, position, faceTo, cmd) {
                 tmpRoverPos[1]<0 ||
                 tmpRoverPos[0]>marsPlateauSize[0] ||
                 tmpRoverPos[1]>marsPlateauSize[1] ) 
-                    //throw new Error("Invalid move command, rover stopped!");
                     return "Invalid command, rover stopped!";
             
             roverPos = tmpRoverPos;
@@ -26,8 +32,9 @@ function rover(size, position, faceTo, cmd) {
         }
 
     }
-
-    return `Mars Plateau Size is [${marsPlateauSize}].\nRover initial position is [${initPos}].\nRover face to ${initFace}.\nCommand sent: ${roverCmd}.\nFinal rover position:${roverPos[0]} ${roverPos[1]} ${roverFaceTo}.`
+    //debug
+    //`Mars Plateau Size is [${marsPlateauSize}].\nRover initial position is [${initPos}].\nRover face to ${initFace}.\nCommand sent: ${roverCmd}.\nFinal rover position:${roverPos[0]} ${roverPos[1]} ${roverFaceTo}.`
+    return `${roverPos[0]} ${roverPos[1]} ${roverFaceTo}.`
 }
 
 function move(pos,faceTo,cmd) {
@@ -40,7 +47,6 @@ function move(pos,faceTo,cmd) {
     } else if (faceTo === 'W') { 
         return [pos[0]-1,pos[1]];
     }
-    //return "Mars Rover is moving!!!"
 }
 
 function turn(faceTo,cmd) {
@@ -53,16 +59,10 @@ function turn(faceTo,cmd) {
     } else if (faceTo === "W") {
         return (cmd === "L") ? "S" : "N";
     }
-    //return `Mars Rover turned ${cmd}`
-}
-
-function showRoverLocation(size,pos,face) {
-    return `Mars Plateau Size is [${size}].\nRover initial position is [${pos}].\nRover face to ${face}.`
 }
 
 module.exports = {
     rover,
     move,
-    turn,
-    showRoverLocation
+    turn
 };
