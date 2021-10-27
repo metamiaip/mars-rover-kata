@@ -2,8 +2,8 @@
 a controller to call multiple mars rover
 functionality:
 1.receive multiple set of command for multiple rover
-2.simulate each rover move and record its simulated final position
-3.if any of the rover simulated final position is the same, reject the whole set of command
+2.move each rover and record its final position
+3.if received any error during any move of the rovers, reject the whole set of command
 */
 
 const {
@@ -19,15 +19,13 @@ function roverControl(roverSet) {
     let roversCoordArr = [];    //keep unique rover position after move
     let roversOutput = [];
 
-    //save all rovers init position
+    //save all rovers init position (x,y) coordinates, ignore direction
     for (let j=0; j<roverLocation.length; j++) {
         roversInitPosArr.push(roverLocation[j].pos[0] + " " + roverLocation[j].pos[1]);
     }
-    //console.log(roversInitPosArr);
+
     for (let i=0; i<roverLocation.length; i++) {
-        curRoverMoveTo = roverMoveSimulation(roverLocation[i].size,roverLocation[i].pos,roverLocation[i].face,roverLocation[i].cmd, roversInitPosArr);
-        //console.log(`id: ${roverLocation[i].id}, move to: ${curRoverMoveTo.substring(0,3)}`);
-        //console.log(curRoverMoveTo);
+        curRoverMoveTo = rover(roverLocation[i].size,roverLocation[i].pos,roverLocation[i].face,roverLocation[i].cmd, roversInitPosArr);
         //after rover move, check any collision with other rovers
         //may collide with some rovers not yet move
         if (roversCoordArr.indexOf(curRoverMoveTo.substring(0,3))>=0 || 
@@ -39,22 +37,14 @@ function roverControl(roverSet) {
         } 
         roversCoordArr.push(curRoverMoveTo.substring(0,3));
         roversInitPosArr.shift(); //remove the original rover position
-        roversInitPosArr.push(curRoverMoveTo.substring(0,3));  //update rover position
-        roversOutput.push(curRoverMoveTo);
-        //console.log(roversInitPosArr);
-        //console.log(roversCoordArr.indexOf(curRoverMoveTo.substring(0,3)));
-        //console.log(roversCoordArr);
+        roversInitPosArr.push(curRoverMoveTo.substring(0,3));  //append new rover position
+        roversOutput.push(curRoverMoveTo);  //keep the rover final position and direction
     }
     return roversOutput;
 }
 
-function roverMoveSimulation(size, position, faceTo, cmd, posArr) {
-    return rover(size, position, faceTo, cmd, posArr);
-}
-
 module.exports = {
-    roverControl,
-    roverMoveSimulation
+    roverControl
 };
 
 //test command: node roverControl.js
