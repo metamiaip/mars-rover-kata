@@ -15,41 +15,55 @@ const {
 function roverControl(roverSet) {
     const roverLocation = [...roverSet]; 
     let curRoverMoveTo = "";
-    let roversCoordArr = [];    //keep unique rover position
+    let roversInitPosArr = [];
+    let roversCoordArr = [];    //keep unique rover position after move
+    let roversOutput = [];
+
+    //save all rovers init position
+    for (let j=0; j<roverLocation.length; j++) {
+        roversInitPosArr.push(roverLocation[j].pos[0] + " " + roverLocation[j].pos[1]);
+    }
+    //console.log(roversInitPosArr);
     for (let i=0; i<roverLocation.length; i++) {
-        /*
-        console.log(roverLocation[i].id);
-        console.log(roverLocation[i].size);
-        console.log(roverLocation[i].pos);
-        console.log(roverLocation[i].face);
-        console.log(roverLocation[i].cmd); 
-        */
-        curRoverMoveTo = roverMoveSimulation(roverLocation[i].size,roverLocation[i].pos,roverLocation[i].face,roverLocation[i].cmd);
+        curRoverMoveTo = roverMoveSimulation(roverLocation[i].size,roverLocation[i].pos,roverLocation[i].face,roverLocation[i].cmd, roversInitPosArr);
         //console.log(`id: ${roverLocation[i].id}, move to: ${curRoverMoveTo.substring(0,3)}`);
-        
-        if (roversCoordArr.indexOf(curRoverMoveTo.substring(0,3))>0 || 
+        //console.log(curRoverMoveTo);
+        //after rover move, check any collision with other rovers
+        //may collide with some rovers not yet move
+        if (roversCoordArr.indexOf(curRoverMoveTo.substring(0,3))>=0 || 
+            roversInitPosArr.indexOf(curRoverMoveTo.substring(0,3))>=0 ||
+            curRoverMoveTo == "Collision with other rover" ||
             curRoverMoveTo == "Rover initial position is out of the plateau." ||
             curRoverMoveTo == "Invalid command, rover stopped!") {
-          return "Invalid rovers command set, please resend!";
+          return `Invalid rovers command set (id: ${roverLocation[i].id}), please resend!`;
         } 
         roversCoordArr.push(curRoverMoveTo.substring(0,3));
+        roversInitPosArr.shift(); //remove the original rover position
+        roversInitPosArr.push(curRoverMoveTo.substring(0,3));  //update rover position
+        roversOutput.push(curRoverMoveTo);
+        //console.log(roversInitPosArr);
         //console.log(roversCoordArr.indexOf(curRoverMoveTo.substring(0,3)));
         //console.log(roversCoordArr);
     }
-    return true;
+    return roversOutput;
 }
 
-function roverMoveSimulation(size, position, faceTo, cmd) {
-    return rover(size, position, faceTo, cmd);
+function roverMoveSimulation(size, position, faceTo, cmd, posArr) {
+    return rover(size, position, faceTo, cmd, posArr);
 }
+
+module.exports = {
+    roverControl,
+    roverMoveSimulation
+};
 
 //test command: node roverControl.js
 /*
 const rovers = [
-    {id:1, size:[5,5], pos:[0,0], face:"N", cmd:"LRMM"},
-    {id:2, size:[5,5], pos:[0,1], face:"E", cmd:"MM"},
-    {id:3, size:[5,5], pos:[0,1], face:"E", cmd:"MM"}
-  ];
+  {id:1, size:[5,5], pos:[0,0], face:"N", cmd:"LRMM"},
+  {id:2, size:[5,5], pos:[0,1], face:"E", cmd:"MM"}
+];
 
-roverControl(rovers);
+console.log(roverControl(rovers));
 */
+

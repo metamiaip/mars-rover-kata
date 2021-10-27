@@ -1,14 +1,15 @@
 /*
 functionality for a single mars rover
 */
-function rover(size, position, faceTo, cmd) {
+function rover(size, position, faceTo, cmd, roversPosArr) {
     const marsPlateauSize = size;
     const initPos = (position === undefined) ? [0, 0] : position;
     const initFace = (faceTo === undefined) ? "N" : faceTo;
     const roverCmd = (cmd === undefined) ? "" : [...cmd];
-    
+        
     const errMsgInvalidCmd = "Invalid command, rover stopped!";
     const errMsgInvalidPos = "Rover initial position is out of the plateau.";
+    const errMsgCollide = "Collision with other rover";
 
     let roverPos = (position === undefined) ? [0, 0] : position;
     let roverFaceTo = (faceTo === undefined) ? "N" : faceTo;
@@ -33,6 +34,9 @@ function rover(size, position, faceTo, cmd) {
                 tmpRoverPos[1]>marsPlateauSize[1] ) 
                     return errMsgInvalidCmd;
             
+            if (collide(tmpRoverPos[0] + " " + tmpRoverPos[1],roversPosArr)) {
+                return errMsgCollide;
+            }
             roverPos = tmpRoverPos;
         } else {
             return errMsgInvalidCmd; 
@@ -41,7 +45,7 @@ function rover(size, position, faceTo, cmd) {
     }
     //debug
     //`Mars Plateau Size is [${marsPlateauSize}].\nRover initial position is [${initPos}].\nRover face to ${initFace}.\nCommand sent: ${roverCmd}.\nFinal rover position:${roverPos[0]} ${roverPos[1]} ${roverFaceTo}.`
-    return `${roverPos[0]} ${roverPos[1]} ${roverFaceTo}.`
+    return `${roverPos[0]} ${roverPos[1]} ${roverFaceTo}`
 }
 
 function move(pos,faceTo,cmd) {
@@ -68,8 +72,19 @@ function turn(faceTo,cmd) {
     }
 }
 
+function collide(checkPos, posArr) {
+    if (posArr === undefined) return false;
+    for (let i=0; i<posArr.length; i++) {
+        if (posArr.indexOf(checkPos)>=0) {
+            return true;    
+        }
+    }
+    return false;
+}
+
 module.exports = {
     rover,
     move,
-    turn
+    turn,
+    collide
 };
