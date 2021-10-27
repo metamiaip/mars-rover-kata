@@ -31,7 +31,13 @@ Validation:
 Future thoughts:
 1. Now all rovers move in sequence (one by one), and when one of the rovers with invalid command, all rovers movement are rejected to prevent any collision.  Another approach should be to allow the rovers to move before the collision and report back to NASA which rover with non-executed command.
 2. In real world, if Mars plateau is 5x5, when the rover reach [5,5] position and face E, it should be able to keep moving and its position can go back to [0,5] (like moving around on the sphere).
-3. Error message management can use a seperate module to handle by passing the message key and return the error.
+3. Error message management can use a seperate module to handle by passing the message key and return the error. Any idea on how javascript module handle error message.  e.g. when calling A function from B function in different modules, if A return error message and B rely on this error to do something.  How can both module share this error message to do something?
 4. try to use mjs but fail to use jest (see rover.mjs and rover.test.mjs).  Is it possible to use "import {...}  from './rover.mjs' " in jest?  Any reference link that I can read and see how to do it?
+5. If roverControl.js only call rover function in rover.js, that mean I don't need to do "module.exports" for other function to prevent it from calling outside this module.  Is this correct?  Currently I exports every functions for other module to call.
+6. To import function from mjs, we can do it like:
+- import {x,y,z} from './xxx.mjs';
+    But in xxx.mjs module, I need to add "export" keywords in every single function.
+    Is there any other ways to do it?
+
 
 
